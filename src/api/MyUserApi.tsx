@@ -49,6 +49,7 @@ export const useCreateMyUser = () => {
 
   const createMyUserRequest = async (user: CreateUserRequest) => {
     const accessToken = await getAccessTokenSilently();
+    console.log("AccessToken " + accessToken);
     const response = await fetch(`${API_BASE_URL}/api/my/user`, {
       method: "POST",
       headers: {

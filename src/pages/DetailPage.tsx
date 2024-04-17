@@ -84,6 +84,7 @@ const DetailPage = () => {
       return;
     }
 
+
     const checkoutData = {
       cartItems: cartItems.map((cartItem) => ({
         menuItemId: cartItem._id,
