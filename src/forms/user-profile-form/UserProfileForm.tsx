@@ -69,7 +69,7 @@ const UserProfileForm = ({
           name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Email</FormLabel>
+              <FormLabel className="p-2">Email</FormLabel>
               <FormControl>
                 <Input {...field} disabled className="bg-white" />
               </FormControl>
@@ -82,9 +82,26 @@ const UserProfileForm = ({
           name="name"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Name</FormLabel>
+              <FormLabel className="p-2">Name</FormLabel>
               <FormControl>
                 <Input {...field} className="bg-white" />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="usertype"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel className="p-2">User Type</FormLabel>
+              <FormControl className="flex gap-4">
+              <select {...field} className="p-2 bg-white rounded-full shadow-md">
+                <option value="" disabled selected>Select user type</option>
+                <option value="user">User</option>
+                <option value="entrepreneur">Entrepreneur</option>
+              </select>
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -97,7 +114,7 @@ const UserProfileForm = ({
             name="addressLine1"
             render={({ field }) => (
               <FormItem className="flex-1">
-                <FormLabel>Address Line 1</FormLabel>
+                <FormLabel className="p-2">Address Line 1</FormLabel>
                 <FormControl>
                   <Input {...field} className="bg-white" />
                 </FormControl>
@@ -110,7 +127,7 @@ const UserProfileForm = ({
             name="city"
             render={({ field }) => (
               <FormItem className="flex-1">
-                <FormLabel>City</FormLabel>
+                <FormLabel className="p-2">City</FormLabel>
                 <FormControl>
                   <Input {...field} className="bg-white" />
                 </FormControl>
@@ -123,7 +140,7 @@ const UserProfileForm = ({
             name="country"
             render={({ field }) => (
               <FormItem className="flex-1">
-                <FormLabel>Country</FormLabel>
+                <FormLabel className="p-2">Country</FormLabel>
                 <FormControl>
                   <Input {...field} className="bg-white" />
                 </FormControl>
