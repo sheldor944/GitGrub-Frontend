@@ -2,6 +2,8 @@ import { useAuth0 } from '@auth0/auth0-react';
 import { useMutation, useQuery } from 'react-query';
 import { toast } from 'sonner';
 import { Review } from '@/types';
+import { ReviewFormData } from '@/forms/manage-restaurant-form/ReviewForm';
+import { error } from 'console';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -45,7 +47,7 @@ export const useGetReviewsByRestaurantId = (restaurantId:  string) => {
 export const useCreateReview = () => {
   const { getAccessTokenSilently } = useAuth0();
 
-  const createReviewRequest = async (reviewData: Review) => {
+  const createReviewRequest = async (reviewData: FormData) : Promise<Review> => {
     const accessToken = await getAccessTokenSilently();
 
     try {
@@ -55,7 +57,7 @@ export const useCreateReview = () => {
           Authorization: `Bearer ${accessToken}`,
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(reviewData),
+        body: reviewData,
       });
 
       if (!response.ok) {
@@ -69,11 +71,17 @@ export const useCreateReview = () => {
   };
 
   const {
-    mutateAsync: createReview,
+    mutate: createReview,
     isLoading,
     isError,
     isSuccess,
   } = useMutation(createReviewRequest);
+  if(isSuccess){
+    toast.success("Review posted sucessfully"); 
+  }
+  if(isError){
+    toast.error("Failed to create review");
+  }
 
   return {
     createReview,
@@ -82,3 +90,5 @@ export const useCreateReview = () => {
     isSuccess,
   };
 };
+
+

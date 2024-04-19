@@ -12,7 +12,7 @@ import { UserFormData } from "@/forms/user-profile-form/UserProfileForm";
 import { useCreateCheckoutSession } from "@/api/OrderApi";
 import ReviewItems from "@/components/ReviewItems";
 import ReviewForm from "@/forms/manage-restaurant-form/ReviewForm";
-import { useGetMyUser, useUpdateMyUser } from "@/api/MyUserApi";
+import { useCreateReview } from "@/api/ReviewApi";
 
 export type CartItem = {
   _id: string;
@@ -22,13 +22,14 @@ export type CartItem = {
 };
 
 const DetailPage = () => {
-  const { currentUser, isLoading: isGetLoading } = useGetMyUser();
   const { restaurantId } = useParams();
   const { restaurant, isLoading: restaurantIsLoading } = useGetRestaurant(restaurantId);
   const { createCheckoutSession, isLoading: isCheckoutLoading } = useCreateCheckoutSession();
+  const {createReview, isLoading } = useCreateReview();
   const [cartItems, setCartItems] = useState<CartItem[]>(() => {
     const storedCartItems = sessionStorage.getItem(`cartItems-${restaurantId}`);
     return storedCartItems ? JSON.parse(storedCartItems) : [];
+
   });
 
   const addToCart = (menuItem: MenuItemType) => {
@@ -79,11 +80,6 @@ const DetailPage = () => {
 
       return updatedCartItems;
     });
-  };
-  const handleSaveReview = (reviewData: any, restaurantId: any) => {
-    // Logic to save the review, such as calling an API function
-    console.log('Review data:', reviewData);
-    console.log('Restaurant ID:', restaurantId);
   };
 
   const onCheckout = async (userFormData: UserFormData) => {
@@ -156,10 +152,9 @@ const DetailPage = () => {
       <div>
       {/* Other detail page content */}
       <ReviewForm
-        onSave={handleSaveReview}
+        onSave={createReview}
         isLoading={restaurantIsLoading} // You need to define isLoading state in your component
-        restaurantId={restaurantId||''}
-        currnetuser={currentUser} // Pass the restaurant ID to the ReviewForm component
+        restaurantId={restaurantId||''} // Pass the restaurant ID to the ReviewForm component
       />
       </div>
       <div className="grid grid-cols-3">
