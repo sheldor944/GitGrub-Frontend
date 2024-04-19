@@ -5,6 +5,7 @@ export type User = {
   addressLine1: string;
   city: string;
   country: string;
+  usertype: string;
 };
 
 export type MenuItem = {
@@ -62,4 +63,11 @@ export type RestaurantSearchResponse = {
     page: number;
     pages: number;
   };
+};
+export type Review = {
+  user: string;
+  restaurant: string;
+  message: string;
+  rating: number;
+  ratingTime: Date;
 };

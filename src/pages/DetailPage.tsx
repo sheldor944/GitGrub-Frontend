@@ -10,6 +10,9 @@ import { MenuItem as MenuItemType } from "../types";
 import CheckoutButton from "@/components/CheckoutButton";
 import { UserFormData } from "@/forms/user-profile-form/UserProfileForm";
 import { useCreateCheckoutSession } from "@/api/OrderApi";
+import ReviewItems from "@/components/ReviewItems";
+import ReviewForm from "@/forms/manage-restaurant-form/ReviewForm";
+import { useGetMyUser, useUpdateMyUser } from "@/api/MyUserApi";
 
 export type CartItem = {
   _id: string;
@@ -19,11 +22,10 @@ export type CartItem = {
 };
 
 const DetailPage = () => {
+  const { currentUser, isLoading: isGetLoading } = useGetMyUser();
   const { restaurantId } = useParams();
-  const { restaurant, isLoading } = useGetRestaurant(restaurantId);
-  const { createCheckoutSession, isLoading: isCheckoutLoading } =
-    useCreateCheckoutSession();
-
+  const { restaurant, isLoading: restaurantIsLoading } = useGetRestaurant(restaurantId);
+  const { createCheckoutSession, isLoading: isCheckoutLoading } = useCreateCheckoutSession();
   const [cartItems, setCartItems] = useState<CartItem[]>(() => {
     const storedCartItems = sessionStorage.getItem(`cartItems-${restaurantId}`);
     return storedCartItems ? JSON.parse(storedCartItems) : [];
@@ -78,6 +80,11 @@ const DetailPage = () => {
       return updatedCartItems;
     });
   };
+  const handleSaveReview = (reviewData: any, restaurantId: any) => {
+    // Logic to save the review, such as calling an API function
+    console.log('Review data:', reviewData);
+    console.log('Restaurant ID:', restaurantId);
+  };
 
   const onCheckout = async (userFormData: UserFormData) => {
     if (!restaurant) {
@@ -105,8 +112,8 @@ const DetailPage = () => {
     window.location.href = data.url;
   };
 
-  if (isLoading || !restaurant) {
-    return "Loading...";
+  if (restaurantIsLoading || !restaurant) {
+    return 'Loading...';
   }
 
   return (
@@ -145,6 +152,18 @@ const DetailPage = () => {
             </CardFooter>
           </Card>
         </div>
+      </div>
+      <div>
+      {/* Other detail page content */}
+      <ReviewForm
+        onSave={handleSaveReview}
+        isLoading={restaurantIsLoading} // You need to define isLoading state in your component
+        restaurantId={restaurantId||''}
+        currnetuser={currentUser} // Pass the restaurant ID to the ReviewForm component
+      />
+      </div>
+      <div className="grid grid-cols-3">
+      <ReviewItems restaurantId={restaurantId||''} />
       </div>
     </div>
   );
