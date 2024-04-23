@@ -9,24 +9,13 @@ interface ReviewItemsProps {
 
 const ReviewItems: React.FC<ReviewItemsProps> = ({ restaurantId }) => {
   const [reviews, setReviews] = useState<Review[]>([]);
+  const { reviews: fetchedReviews, isLoading } = useGetReviewsByRestaurantId(restaurantId);
 
   useEffect(() => {
-    if (!restaurantId) {
-      return; // No need to fetch reviews if restaurantId is undefined or null
+    if (!isLoading && fetchedReviews) {
+      setReviews(fetchedReviews);
     }
-
-    // Fetch reviews by restaurant ID when component mounts
-    const fetchReviews = async () => {
-      try {
-        const fetchedReviews = await useGetReviewsByRestaurantId(restaurantId); // You need to implement this function
-        setReviews(fetchedReviews);
-      } catch (error) {
-        console.error('Error fetching reviews:', error);
-      }
-    };
-
-    fetchReviews();
-  }, [restaurantId]); // Fetch reviews whenever restaurantId changes
+  }, [isLoading, fetchedReviews]);
 
   return (
     <div className="review-items">
@@ -41,7 +30,7 @@ const ReviewItems: React.FC<ReviewItemsProps> = ({ restaurantId }) => {
           <h3>User: {review.user}</h3>
           <p>Message: {review.message}</p>
           <p>Rating: {review.rating}</p>
-          <p>Rating Time: {review.ratingTime}</p>
+          <p>Rating Time: {review.ratingTime ? new Date(review.ratingTime).toDateString() : 'Unknown'}</p>
         </div>
       ))}
     </div>

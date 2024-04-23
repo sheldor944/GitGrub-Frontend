@@ -13,6 +13,7 @@ import { useCreateCheckoutSession } from "@/api/OrderApi";
 import ReviewItems from "@/components/ReviewItems";
 import ReviewForm from "@/forms/manage-restaurant-form/ReviewForm";
 import { useCreateReview } from "@/api/ReviewApi";
+import { useGetMyUser } from "@/api/MyUserApi";
 
 export type CartItem = {
   _id: string;
@@ -24,8 +25,9 @@ export type CartItem = {
 const DetailPage = () => {
   const { restaurantId } = useParams();
   const { restaurant, isLoading: restaurantIsLoading } = useGetRestaurant(restaurantId);
+  const { currentUser, isLoading: isGetLoading } = useGetMyUser();
   const { createCheckoutSession, isLoading: isCheckoutLoading } = useCreateCheckoutSession();
-  const {createReview, isLoading } = useCreateReview();
+  const {createReview, isLoading } = useCreateReview(restaurantId);
   const [cartItems, setCartItems] = useState<CartItem[]>(() => {
     const storedCartItems = sessionStorage.getItem(`cartItems-${restaurantId}`);
     return storedCartItems ? JSON.parse(storedCartItems) : [];
@@ -152,8 +154,9 @@ const DetailPage = () => {
       <div>
       {/* Other detail page content */}
       <ReviewForm
+        currentuser={currentUser}
         onSave={createReview}
-        isLoading={restaurantIsLoading} // You need to define isLoading state in your component
+        isLoading={isLoading} // You need to define isLoading state in your component
         restaurantId={restaurantId||''} // Pass the restaurant ID to the ReviewForm component
       />
       </div>

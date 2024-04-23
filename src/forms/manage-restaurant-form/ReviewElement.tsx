@@ -9,13 +9,22 @@ import {
   import { Input } from "@/components/ui/input";
   import { useFormContext } from "react-hook-form";
   import StarGiving from "@/components/StarGiving";
+  import { useEffect } from "react";
 
   
   const ReviewElement =() => {
-    const { control } = useFormContext();
+    const { control, watch, setValue } = useFormContext();
+    const rating = watch("rating");
+    const handleStarClick = (value) => {
+      setValue("rating", value);
+      console.log(control._formValues);
+    };
+    useEffect(() => {
+      console.log("Rating updated:", rating);
+    }, [rating]);
     return (
       <div><div>
-      <h2 className="text-2xl font-bold pl-3 pt-2">Review</h2>
+      <h2 className="text-2xl font-bold pl-3 pt-2">Give a Review</h2>
       <FormDescription className='pl-3 font-mono'>Share your experience with others</FormDescription>
     </div>
     <div className='pl-3'>
@@ -33,25 +42,17 @@ import {
       )}
     />
     </div>
-    <div className="pl-3 pb-3">
-    <FormField
-      control={control}
-      name="rating"
-      render={({ field }) => (
-        <FormItem>
-          <FormLabel className="p-3">Rating:</FormLabel>
-          <div className="rating">
-            {[1, 2, 3, 4, 5].map((value) => (
-              <StarGiving
-                key={value}
-                filled={value <= field.value}
-                onClick={() => field.onChange(value)}
-              />
-            ))}
-          </div>
-        </FormItem>
-      )}
-    />
+    <div className="pl-3">
+        <div className="p-3">Rating:</div>
+        <div className="rating">
+          {[1, 2, 3, 4, 5].map((value) => (
+            <StarGiving
+              key={value}
+              filled={value <= rating}
+              onClick={() => handleStarClick(value)}
+            />
+          ))}
+        </div>
   </div></div>
     );
   };

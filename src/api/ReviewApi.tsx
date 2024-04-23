@@ -4,21 +4,16 @@ import { toast } from 'sonner';
 import { Review } from '@/types';
 import { ReviewFormData } from '@/forms/manage-restaurant-form/ReviewForm';
 import { error } from 'console';
+import { undefined } from 'zod';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 export const useGetReviewsByRestaurantId = (restaurantId:  string) => {
-  const { getAccessTokenSilently } = useAuth0();
 
   const getReviewsByRestaurantIdRequest = async (restaurantId: string): Promise<Review[]> => {
-    const accessToken = await getAccessTokenSilently();
-
+    console.log(restaurantId);
     try {
-      const response = await fetch(`${API_BASE_URL}/api/reviews?restaurantId=${restaurantId}`, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-          'Content-Type': 'application/json',
-        },
+      const response = await fetch(`${API_BASE_URL}/api/review/${restaurantId}`, {
       });
 
       if (!response.ok) {
@@ -44,18 +39,19 @@ export const useGetReviewsByRestaurantId = (restaurantId:  string) => {
   return { reviews, isLoading };
 };
 
-export const useCreateReview = () => {
+export const useCreateReview = (restaurantId?:string) => {
   const { getAccessTokenSilently } = useAuth0();
 
-  const createReviewRequest = async (reviewData: FormData) : Promise<Review> => {
+  const createReviewRequest = async (reviewData: FormData):Promise<Review>  => {
     const accessToken = await getAccessTokenSilently();
 
-    try {
-      const response = await fetch(`${API_BASE_URL}/api/reviews`, {
-        method: 'POST',
+      for(let pair of reviewData){
+        console.log('key',pair[0],  'value', pair[1]);
+      }
+      const response = await fetch(`${API_BASE_URL}/api/review/saveReview/${restaurantId}`, {
+        method: 'PUT',
         headers: {
-          Authorization: `Bearer ${accessToken}`,
-          'Content-Type': 'application/json',
+          Authorization: `Bearer ${accessToken}`,  
         },
         body: reviewData,
       });
@@ -63,11 +59,7 @@ export const useCreateReview = () => {
       if (!response.ok) {
         throw new Error('Failed to create review');
       }
-
       return response.json();
-    } catch (error) {
-      throw new Error('Failed to create review');
-    }
   };
 
   const {

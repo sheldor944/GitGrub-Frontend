@@ -1,14 +1,13 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useForm, useFormContext } from 'react-hook-form';
 import { z } from 'zod';
+import { Form } from "@/components/ui/form";
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
 import LoadingButton from '@/components/LoadingButton';
-import { Button } from '@/components/ui/button';
-import StarGiving from '@/components/StarGiving'; 
+import { Button } from '@/components/ui/button'; 
 import { useGetMyUser, useUpdateMyUser } from "@/api/MyUserApi";
 import ReviewElement from './ReviewElement';
+import { User } from '@/types';
 
 
 const formSchema = z.object({
@@ -16,57 +15,55 @@ const formSchema = z.object({
   restaurant: z.string(),
   message: z.string().min(1, 'Message is required'),
   rating: z.number().min(1, 'Rating is required').max(5, 'Rating must be between 1 and 5'),
-  ratingTime: z.date(),
+  ratingTime: z.string(),
 });
 
 export type ReviewFormData = z.infer<typeof formSchema>;
 
 type Props = {
-  onSave: (reviewData: FormData) => void;
+  currentuser: User;
+  onSave: (formData1: FormData) => void;
   isLoading: boolean;
   restaurantId: string; // New prop for restaurant ID
-  title?: string;
   buttonText?: string;
 };
 
 const ReviewForm = ({
+  currentuser,
   onSave,
   isLoading,
   restaurantId,
-  title = 'Leave a Review',
   buttonText = 'Submit Review',
 }:Props) => {
   const form = useForm<ReviewFormData>({
     resolver: zodResolver(formSchema),
+    defaultValues:{
+      user: currentuser?._id || '',
+      restaurant: restaurantId,
+      ratingTime: new Date().toDateString(),
+    }
   });
-  const [rating, setRating] = useState<number>(0); // Initialize rating state
-  const [message, setMessage] = useState<string>(''); // Initialize message state
+  useEffect(() => {
+    if(!currentuser){
+      return;
+}
+}),[currentuser];
   const [error, setError] = useState<string>(''); // Initialize error state
   
-
-  
-  const onSubmit = (formDataJson:ReviewFormData) => {
-    console.log("buttonclick accpeted")
-    const formData= new FormData();
-    const { currentUser, isLoading: isGetLoading } = useGetMyUser();
-    const uname = currentUser?.name;
-    formData.append("user", uname?.toString() ?? "");    
-    formData.append("restaurant",restaurantId);
-    formData.append("message",formDataJson.message);
-    formData.append("rating",String(formDataJson.rating));
-    const currentDate = new Date().toDateString();
-    formData.append("ratingTime", currentDate);
-
-    
+  const onSubmitHaapens = (formDataJson:ReviewFormData) => {
+    const formData = new FormData();
+    Object.entries(formDataJson).forEach(([key, value]) => {
+    formData.append(key, String(value));
+    });
+    for (let pair of formData.entries()) {
+      console.log(pair[0], pair[1]);
+    }
     onSave(formData);
-  }
-  function faltu() {
-    console.log("buttonclick accpeted");
-    
+    form.reset();
   }
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 bg-gray-50 rounded-lg md:p-10">
+      <form onSubmit={form.handleSubmit(onSubmitHaapens)} className="space-y-4 bg-gray-50 rounded-lg md:p-10">
        <ReviewElement/>
         {isLoading ? (
           <LoadingButton />
