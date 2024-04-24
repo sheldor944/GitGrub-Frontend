@@ -28,9 +28,10 @@ const ReviewItems: React.FC<ReviewItemsProps> = ({ restaurantId }) => {
       
 
       {/* Display individual reviews */}
-      {reviews.map((review, index) => (
+      {reviews.slice().reverse().map((review, index) => (
         <div key={index} className="review rounded-lg bg-gray-200 shadow-lg p-2">
-          <h6>{review.user}</h6>
+          <h6 className='font-semibold'>{review.username ? 
+          `${review.username}` : review.email ? `${review.email}` : `Anonymous` }</h6>
           <div className="rating flex ">
             {Array.from({ length: 5 }).map((_, i) => (
               <Star key={i} filled={i < review.rating} />

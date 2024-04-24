@@ -16,10 +16,13 @@ const formSchema = z.object({
   // message: z.string().min(1, 'Message is required'),
   // rating: z.number().min(1, 'Rating is required').max(5, 'Rating must be between 1 and 5'),
   ratingTime: z.string(),
+  email: z.string(),
+  username: z.string(),
   user: z.string(),
   restaurant: z.string(),
   message: z.string().min(1, 'Message is required'),
   rating: z.number().min(1, 'Rating is required').max(5, 'Rating must be between 1 and 5'),
+
   // ratingTime: z.string().regex(/\d{4}-\d{2}-\d{2}/, 'Invalid date format (YYYY-MM-DD)'),
 
 });
@@ -46,6 +49,8 @@ const ReviewForm = ({
     defaultValues:{
       user: currentuser?._id || '',
       restaurant: restaurantId,
+      email: currentuser?.email || '',
+      username: currentuser?.name || '',
       ratingTime: new Date().toDateString(),
     }
   });

@@ -67,6 +67,8 @@ export type RestaurantSearchResponse = {
 export type Review = {
   user: string;
   restaurant: string;
+  email: string;
+  username: string;
   message: string;
   rating: number;
   ratingTime: Date;
