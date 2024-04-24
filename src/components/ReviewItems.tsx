@@ -11,6 +11,7 @@ const ReviewItems: React.FC<ReviewItemsProps> = ({ restaurantId }) => {
   const [reviews, setReviews] = useState<Review[]>([]);
   const { reviews: fetchedReviews, isLoading } = useGetReviewsByRestaurantId(restaurantId);
 
+
   useEffect(() => {
     if (!isLoading && fetchedReviews) {
       setReviews(fetchedReviews);
@@ -18,19 +19,22 @@ const ReviewItems: React.FC<ReviewItemsProps> = ({ restaurantId }) => {
   }, [isLoading, fetchedReviews]);
 
   return (
-    <div className="review-items">
-      <h2>Reviews</h2>
+    <div className="grid-col-3 review-items flex gap-5 p-3">
+      
+
       {reviews.map((review, index) => (
+
         <div key={index} className="review">
-          <div className="rating">
+          <h6 className='font-semibold'> {review.user}</h6>
+          <div className="rating flex">
             {Array.from({ length: 5 }).map((_, i) => (
               <Star key={i} filled={i < review.rating} />
             ))}
+            <p className='p-2 font-semibold'>({review.rating})</p>
           </div>
-          <h3>User: {review.user}</h3>
-          <p>Message: {review.message}</p>
-          <p>Rating: {review.rating}</p>
-          <p>Rating Time: {review.ratingTime ? new Date(review.ratingTime).toDateString() : 'Unknown'}</p>
+          
+          <p className='text-sm font-semibold'>Message: {review.message}</p>
+          <p className='text-xs'> {review.ratingTime ? new Date(review.ratingTime).toDateString() : 'Unknown'}</p>
         </div>
       ))}
     </div>

@@ -84,3 +84,11 @@
 .star:hover {
   cursor: pointer;
 }
+.max-width {
+  max-width: 100vw;
+}
+
+.wrap {
+  flex-wrap: wrap;
+}
+
