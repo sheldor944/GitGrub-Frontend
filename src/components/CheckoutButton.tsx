@@ -20,6 +20,7 @@ const dummy: UserFormData = {
   name: "John Doe",
   addressLine1: "123 Street",
   city: "City",
+  usertype : "User",
   country: "Country",
   email: "john@example.com"
 };

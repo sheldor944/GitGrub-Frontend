@@ -39,7 +39,8 @@ export const useCreateMyRestaurant = () => {
     restaurantFormData: FormData
   ): Promise<Restaurant> => {
     const accessToken = await getAccessTokenSilently();
-
+    console.log("this is in the createRestaurant Request");
+    console.log(restaurantFormData);
     const response = await fetch(`${API_BASE_URL}/api/my/restaurant`, {
       method: "POST",
       headers: {
@@ -80,6 +81,9 @@ export const useUpdateMyRestaurant = () => {
     restaurantFormData: FormData
   ): Promise<Restaurant> => {
     const accessToken = await getAccessTokenSilently();
+
+    console.log("this is in the updateRestaurant Request");
+    console.log(restaurantFormData);
 
     const response = await fetch(`${API_BASE_URL}/api/my/restaurant`, {
       method: "PUT",

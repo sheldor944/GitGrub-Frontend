@@ -35,7 +35,7 @@ import {
         <FormItem>
           <FormLabel className='p-1 text-1xl font-mono font-bold'>Message</FormLabel>
           <FormControl>
-            <Input {...field} className="bg-white pl-3" placeholder="Enter your text here" />
+            <Input {...field}  className="bg-white pl-3" placeholder="Enter your text here" />
           </FormControl>
           <FormMessage />
         </FormItem>
