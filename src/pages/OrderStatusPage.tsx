@@ -5,6 +5,19 @@ import { AspectRatio } from "@/components/ui/aspect-ratio";
 
 const OrderStatusPage = () => {
   const { orders, isLoading } = useGetMyOrders();
+  console.log("these are my orders at order status page ");
+  if (orders && orders.length > 0) {
+    console.log("got some order");
+    const restaurantId = orders[0]['restaurant']['_id'];
+    console.log(restaurantId);
+    
+    sessionStorage.removeItem(`cartItems-${restaurantId}`);
+
+    // console.log(orders[0]);
+  } else {
+    console.log("No orders available.");
+  }
+  // const restaurantId = orders.restaurantId;
 
   if (isLoading) {
     return "Loading...";

@@ -22,6 +22,18 @@ export type CartItem = {
   quantity: number;
 };
 
+function sleep(ms: number): Promise<void> {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+// Usage
+async function example() {
+  console.log('Start');
+  await sleep(2000); // Sleep for 2 seconds
+  console.log('End');
+}
+
+
 const DetailPage = () => {
   const { restaurantId } = useParams();
   const { restaurant, isLoading: restaurantIsLoading } = useGetRestaurant(restaurantId);
@@ -105,9 +117,14 @@ const DetailPage = () => {
         email: userFormData.email as string,
       },
     };
-
+    console.log(cartItems);
     const data = await createCheckoutSession(checkoutData);
+    console.log(data);
+    // example();
     window.location.href = data.url;
+    //trying to remove clear cart item after checkout 
+    // console.log("This is the cart Items");
+    // console.log(cartItems);
   };
 
   if (restaurantIsLoading || !restaurant) {
