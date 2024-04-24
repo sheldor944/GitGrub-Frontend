@@ -76,6 +76,7 @@ export const useCreateReview = (restaurantId?:string) => {
   } = useMutation(createReviewRequest);
   if(isSuccess){
     toast.success("Review posted sucessfully"); 
+    window.location.reload();
   }
   if(isError){
     toast.error("Failed to create review");
