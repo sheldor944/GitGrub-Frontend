@@ -91,4 +91,24 @@
 .wrap {
   flex-wrap: wrap;
 }
+.grid-container {
+  display: grid;
+  gap: 1rem;
+}
 
+.review {
+  min-width: 220px; /* Set your desired minimum width */
+  flex-grow: 1; /* Allow the review to grow within the grid cell */
+}
+
+@media (min-width: 640px) {
+  .grid-container {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1024px) {
+  .grid-container {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}

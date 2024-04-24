@@ -42,7 +42,7 @@ const UserProfileForm = ({
   currentUser,
   title = "User Profile",
   buttonText = "Submit",
-  isDelivery = false, // Default to false
+  isDelivery, // Default to false
 }: Props) => {
   const form = useForm<UserFormData>({
     resolver: zodResolver(formSchema),
@@ -91,24 +91,30 @@ const UserProfileForm = ({
             </FormItem>
           )}
         />
-        <FormField
-          control={form.control}
-          name="usertype"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel className="p-2">User Type</FormLabel>
-              <FormControl className="flex gap-4">
-              <select {...field} className="p-2 bg-white rounded-full shadow-md">
-                <option value="" disabled selected>Select user type</option>
-                <option value="user">User</option>
-                <option value="entrepreneur">Entrepreneur</option>
-              </select>
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
+        {!isDelivery && (
+          <FormField
+            control={form.control}
+            name="usertype"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="p-2">User Type</FormLabel>
+                <FormControl className="flex gap-4">
+                  <select
+                    {...field}
+                    className="p-2 bg-white rounded-full shadow-md"
+                  >
+                    <option value="" disabled selected>
+                      Select user type
+                    </option>
+                    <option value="user">User</option>
+                    <option value="entrepreneur">Entrepreneur</option>
+                  </select>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        )}
         <div className="flex flex-col md:flex-row gap-4">
           <FormField
             control={form.control}

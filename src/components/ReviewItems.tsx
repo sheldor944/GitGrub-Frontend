@@ -19,25 +19,25 @@ const ReviewItems: React.FC<ReviewItemsProps> = ({ restaurantId }) => {
   }, [isLoading, fetchedReviews]);
 
   return (
-    <div className="grid-col-3 review-items flex gap-5 p-3">
-      
-
+    <div className="grid-container p-3 mb-3 gap-3 ">
       {reviews.map((review, index) => (
-
-        <div key={index} className="review">
-          <h6 className='font-semibold'> {review.user}</h6>
-          <div className="rating flex">
+        <div key={index} className="review rounded-lg bg-gray-100 shadow-md p-2">
+          <h6>{review.user}</h6>
+          <div className="rating flex ">
             {Array.from({ length: 5 }).map((_, i) => (
-              <Star key={i} filled={i < review.rating} />
+            <Star key={i} filled={i < review.rating} />
             ))}
-            <p className='p-2 font-semibold'>({review.rating})</p>
+          <p className="p-2 font-semibold">({review.rating})</p>
           </div>
-          
-          <p className='text-sm font-semibold'>Message: {review.message}</p>
-          <p className='text-xs'> {review.ratingTime ? new Date(review.ratingTime).toDateString() : 'Unknown'}</p>
-        </div>
-      ))}
+          <p className="text-sm font-semibold pb-2">{review.message}</p>
+          <p className="text-xs">
+          {review.ratingTime
+          ? new Date(review.ratingTime).toDateString()
+          : "Unknown"}
+          </p>
     </div>
+  ))}
+</div>
   );
 };
 

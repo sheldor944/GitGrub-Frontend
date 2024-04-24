@@ -23,7 +23,7 @@ const RestaurantInfo = ({ restaurant }: Props) => {
           {restaurant.city}, {restaurant.country}
         </CardDescription>
       </CardHeader>
-      <CardContent className="grid grid-cols-4 max-width gap">
+      <CardContent className="grid grid-cols-4 max-width ">
   {restaurant.cuisines.map((item, index) => (
     <span className="flex wrap">
       {item.split(" ").map((word, i) => (

@@ -160,7 +160,7 @@ const DetailPage = () => {
         restaurantId={restaurantId||''} // Pass the restaurant ID to the ReviewForm component
       />
       </div>
-      <div className=" bg-gray-50 rounded-lg md:p-10">
+      <div className=" bg-gray-50 rounded-lg">
       <h2 className='text-2xl font-bold pl-3'>Reviews</h2>
     
       
