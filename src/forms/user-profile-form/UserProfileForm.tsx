@@ -160,7 +160,7 @@ const UserProfileForm = ({
           <LoadingButton />
         ) : (
           // Conditionally render based on the value of isDelivery prop
-          <Button type="submit" className="bg-orange-500">
+          <Button type="submit" className="bg-dark_color">
             {isDelivery ? "Continue to Payment" : buttonText}
           </Button>
         )}
