@@ -84,7 +84,7 @@ const ReviewForm = ({
         {isLoading ? (
           <LoadingButton />
         ) : (
-          <Button type="submit" className="bg-light_color">
+          <Button type="submit" className="bg-dark_color">
             {buttonText}
           </Button>
         )}
