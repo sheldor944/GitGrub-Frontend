@@ -18,7 +18,7 @@ const HomePage = () => {
         <h1 className="text-5xl font-bold tracking-tight text-dark_color">
           খিদা লাগসে ঢাবিয়ান্স!?
         </h1>
-        <span className="text-xl">Food is just a click away!</span>
+        <span className="text-xl">Git a Grub by just a click!</span>
         <SearchBar
           placeHolder="Search by City or Town"
           onSubmit={handleSearchSubmit}
