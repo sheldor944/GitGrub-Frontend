@@ -2,6 +2,7 @@ import { Order, Restaurant } from "@/types";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useMutation, useQuery } from "react-query";
 import { toast } from "sonner";
+import { Items } from '@/types';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -197,3 +198,96 @@ export const useUpdateMyRestaurantOrder = () => {
 
   return { updateRestaurantStatus, isLoading };
 };
+export const useGetInventory = () => {
+  const { getAccessTokenSilently } = useAuth0();
+
+  const useGetInventory = async (): Promise<Items[]> => {
+    console.log("in the getInventory ");
+    const accessToken = await getAccessTokenSilently();
+    try {
+      const response = await fetch(
+        `${API_BASE_URL}/api/my/restaurant/getInventory`,{
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+            "Content-Type": "application/json",
+          },
+        });
+
+
+      if (!response.ok) {
+        console.log(error);
+        throw new Error('Failed to fetch Inventory');
+      }
+      return response.json();
+    } 
+    catch (error) {
+      throw new Error('Failed to fetch Inventory');
+    }
+  };
+
+  const {
+    data: items,
+    isLoading,
+    error,
+  } = useQuery(['fetchInventory'], () => useGetInventory());
+
+  if (error) {
+    toast.error(error.toString());
+  }
+
+  return { items, isLoading };
+};
+
+export const useAddInventory = () => {
+  const { getAccessTokenSilently } = useAuth0();
+  
+  //console.log("in the useCreateReview " + restaurantId);
+  //console.log(reviewFormData)
+
+  const addInventoryRequest = async (
+    inventoryFormData : FormData
+  ): Promise<Items> => {
+    const accessToken = await getAccessTokenSilently();
+     console.log(inventoryFormData)
+    const response = await fetch(`${API_BASE_URL}/api/my/restaurant/addInventory`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(inventoryFormData),
+    });
+    // console.log("this is the response from useCreateReview ");
+    // console.log(response);
+    // console.log(response.body);
+
+    if (!response.ok) {
+      throw new Error("Failed to create review");
+    }
+
+    return response.json();
+  };
+  const {
+    mutate: addInventory,
+    isLoading,
+    isError,
+    isSuccess,
+  } = useMutation(addInventoryRequest);
+  if(isSuccess){
+    toast.success("item Aded sucessfully"); 
+    window.location.reload();
+  }
+  if(isError){
+    toast.error("Failed to add Item");
+  }
+
+  return {
+    addInventory,
+    isLoading,
+    isError,
+    isSuccess,
+  };
+
+};
+
+

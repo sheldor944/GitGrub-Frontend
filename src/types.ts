@@ -73,3 +73,7 @@ export type Review = {
   rating: number;
   ratingTime: Date;
 };
+export type Items = {
+  itemName: string;
+  availabeQuantity: number;
+};
