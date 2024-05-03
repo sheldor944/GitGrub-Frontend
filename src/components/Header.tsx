@@ -2,16 +2,16 @@ import { Link } from "react-router-dom";
 import MobileNav from "./MobileNav";
 import MainNav from "./MainNav";
 
-
 const Header = () => {
   return (
-    <div className="border-b-2 border-b-orange-500 py-6">
+    <div className="bg-light_color border-b-2 border-b-dark_color py-6">
       <div className="container mx-auto flex justify-between items-center">
         <div className="flex items-center gap-4">
-          <img src={"/logo.png"} className="max-h-9 max-w-auto relative justify-content " ></img>
+          <img src={"/logo.png"} className="max-h-20 max-w-auto relative justify-content " ></img>
           <Link
             to="/"
-            className="text-3xl font-bold tracking-tight text-orange-500 "
+            className="text-5xl font-bold tracking-tight text-dark_color"
+            // style={{ marginTop: '20px', marginLeft: '10px' }}
           >
             GitGrub
           </Link>

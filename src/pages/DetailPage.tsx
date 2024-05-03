@@ -179,7 +179,7 @@ const DetailPage = () => {
       </div>
       <div className=" bg-gray-50 rounded-lg">
       <h2 className='text-2xl font-bold pl-3'>Reviews</h2>
-    
+      
       
       <ReviewItems restaurantId={restaurantId||''} />
       </div>

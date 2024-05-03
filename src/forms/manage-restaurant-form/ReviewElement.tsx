@@ -25,7 +25,7 @@ import {
     return (
       <div><div>
       <h2 className="text-2xl font-bold pl-3 pt-2">Give a Review</h2>
-      <FormDescription className='pl-3 font-mono'>Share your experience with others</FormDescription>
+      <FormDescription className='pl-3 font-mono'>Let others know about your taste!</FormDescription>
     </div>
     <div className='pl-3'>
     <FormField
@@ -33,7 +33,7 @@ import {
       name="message"
       render={({ field }) => (
         <FormItem>
-          <FormLabel className='p-1 text-1xl font-mono font-bold'>Message</FormLabel>
+          <FormLabel className='p-1 text-1xl font-mono font-bold'>Comments</FormLabel>
           <FormControl>
             <Input {...field}  className="bg-white pl-3" placeholder="Enter your text here" />
           </FormControl>
