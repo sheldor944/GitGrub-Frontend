@@ -267,6 +267,8 @@ export const useAddInventory = () => {
 
     return response.json();
   };
+
+
   const {
     mutate: addInventory,
     isLoading,
@@ -337,3 +339,57 @@ export const useUpdateInventoryItem = () => {
 };
 
 
+
+export const useAddEmployee = () => {
+  const { getAccessTokenSilently } = useAuth0();
+  
+  //console.log("in the useCreateReview " + restaurantId);
+  //console.log(reviewFormData)
+
+  const addEmployeeRequest = async (
+    employeeFormData : FormData
+  ): Promise<Items> => {
+    const accessToken = await getAccessTokenSilently();
+     console.log(employeeFormData)
+    const response = await fetch(`${API_BASE_URL}/api/my/restaurant/addEmployee`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(employeeFormData),
+    });
+    // console.log("this is the response from useCreateReview ");
+    // console.log(response);
+    // console.log(response.body);
+
+    if (!response.ok) {
+      throw new Error("Failed to create employee");
+    }
+
+    return response.json();
+  };
+
+  
+  const {
+    mutate: addEmployee,
+    isLoading,
+    isError,
+    isSuccess,
+  } = useMutation(addEmployeeRequest);
+  if(isSuccess){
+    toast.success("Employee Aded sucessfully"); 
+    window.location.reload();
+  }
+  if(isError){
+    toast.error("Failed to add Employee");
+  }
+
+  return {
+    addEmployee,
+    isLoading,
+    isError,
+    isSuccess,
+  };
+
+};

@@ -8,6 +8,7 @@ import ManageRestaurantPage from "./pages/ManageRestaurantPage";
 import SearchPage from "./pages/SearchPage";
 import DetailPage from "./pages/DetailPage";
 import OrderStatusPage from "./pages/OrderStatusPage";
+import ManageEmployeePage from "./pages/ManageEmployeePage";
 
 const AppRoutes = () => {
   return (
@@ -63,7 +64,7 @@ const AppRoutes = () => {
           }
         />
       </Route>
-
+      <Route path="/employee-profile" element={<Layout><ManageEmployeePage /></Layout>}/>
       <Route path="*" element={<Navigate to="/" />} />
     </Routes>
   );
