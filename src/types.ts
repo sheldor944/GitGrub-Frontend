@@ -36,6 +36,7 @@ export type OrderStatus =
   | "delivered";
 
 export type Order = {
+  totalPrice: number;
   _id: string;
   restaurant: Restaurant;
   user: User;

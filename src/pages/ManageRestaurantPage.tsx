@@ -9,6 +9,7 @@ import {
 } from "@/api/MyRestaurantApi";
 import InventoryTable from "@/components/InventoryTable";
 import OrderItemCard from "@/components/OrderItemCard";
+import SalesChart from "@/components/SalesChart";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import EmployeeProfileForm from "@/forms/employee-profile-form/EmployeeProfileForm";
 import ManageInvetory from "@/forms/manage-restaurant-form/ManageInvetory";
@@ -34,6 +35,7 @@ const ManageRestaurantPage = () => {
           <TabsTrigger value="manage-restaurant">Manage Restaurant</TabsTrigger>
           <TabsTrigger value="manage-inventory">Manage Inventory</TabsTrigger>
           <TabsTrigger value="employee-profile">Manage Employees</TabsTrigger>
+          <TabsTrigger value="reports">Sales Report</TabsTrigger>
 
         </TabsList>
       </div>
@@ -70,6 +72,13 @@ const ManageRestaurantPage = () => {
           onSave={addEmployee}
           isLoading={isEmployeeLoading}
         />
+      </TabsContent>
+      <TabsContent value="reports" className="space-y-5 bg-gray-50 p-10 rounded-lg">
+        <SalesChart
+        
+        orders={orders}>
+
+        </SalesChart>
       </TabsContent>
     </Tabs>
   );
