@@ -5,12 +5,9 @@ import { useGetMyUser } from "@/api/MyUserApi";
 
 const MobileNavLinks = () => {
   const { logout } = useAuth0();
-  const { currentUser, isLoading: isGetLoading } = useGetMyUser();
+  const { currentUser} = useGetMyUser();
   console.log(currentUser?.usertype);
   // Wait until currentUser is defined
-  if (isGetLoading || !currentUser) {
-    return null; // Or any loading indicator
-  }
 
   return (
     <>
@@ -20,7 +17,7 @@ const MobileNavLinks = () => {
       >
         Order Status
       </Link>
-      {currentUser.usertype === "entrepreneur" && (
+      {currentUser?.usertype === "entrepreneur" && (
         <Link
           to="/manage-restaurant"
           className="flex bg-white items-center font-bold hover:text-dark_color"
