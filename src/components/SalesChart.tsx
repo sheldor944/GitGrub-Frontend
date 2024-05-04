@@ -218,14 +218,15 @@ const SalesChart: React.FC<{ orders: Order[] | undefined }> = ({ orders }) => {
     if (!timePeriodCtx || !timePeriodOrdersData.length) return;
 
     const newTimePeriodChartInstance = new Chart(timePeriodCtx, {
-      type: 'bar',
+      type: 'line',
       data: {
         labels: Array.from({ length: 8 }, (_, i) => `${i * 3}:00 - ${(i + 1) * 3}:00`),
         datasets: [
           {
             label: 'Orders per 3 Hours',
             data: timePeriodOrdersData,
-            backgroundColor: 'rgba(54, 162, 235, 0.6)',
+            borderColor: 'rgba(54, 162, 235, 0.6)',
+            fill: false,
           },
         ],
       },
@@ -249,15 +250,14 @@ const SalesChart: React.FC<{ orders: Order[] | undefined }> = ({ orders }) => {
 
   return (
     <div className='grid grid-cols-1 gap-20'>
-
       <div style={{ height: `${halfWindowWidth}px`, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
         <canvas id="pieChart" width="300" height="300"></canvas>
       </div>
       <div style={{ height: `${halfWindowWidth / 1.5}px`, marginBottom: '1rem', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
         <canvas id="columnChart" width="300" height="150"></canvas>
       </div>
-      <div style={{ height: `${halfWindowWidth }px`, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-        <canvas id="additionalChart" width="300" height="250"></canvas>
+      <div style={{ height: `${halfWindowWidth / 1.1}px`, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+        <canvas id="additionalChart" width="400" height="250"></canvas>
       </div>
       <div style={{ height: '400px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
         <canvas id="timePeriodChart" width="800" height="400"></canvas>
