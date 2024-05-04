@@ -61,7 +61,7 @@ const ManageInventoryForm = ({ onAdd, isLoading, buttonText = 'Add Item' }: { on
         {isLoading ? (
           <LoadingButton />
         ) : (
-          <Button type="submit" className="bg-orange-500">
+          <Button type="submit" >
             {buttonText}
           </Button>
         )}

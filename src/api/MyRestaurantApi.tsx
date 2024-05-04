@@ -289,5 +289,51 @@ export const useAddInventory = () => {
   };
 
 };
+export const useUpdateInventoryItem = () => {
+  const { getAccessTokenSilently } = useAuth0();
+
+  const updateMyInventoryItem = async (
+    itemRequest:Items
+  ) => {
+    const accessToken = await getAccessTokenSilently();
+
+    const response = await fetch(
+      `${API_BASE_URL}/api/my/restaurant/updateInventory`,
+      {
+        method: "PUT",
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(itemRequest),
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to update status");
+    }
+
+    return response.json();
+  };
+
+  const {
+    mutateAsync: updateInventoryRequest,
+    isLoading,
+    isError,
+    isSuccess,
+    reset,
+  } = useMutation(updateMyInventoryItem);
+
+  if (isSuccess) {
+    toast.success("Inventory updated");
+  }
+
+  if (isError) {
+    toast.error("Unable to update Inventory");
+    reset();
+  }
+
+  return { updateInventoryRequest, isLoading };
+};
 
 
