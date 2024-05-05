@@ -116,6 +116,7 @@ const ManageRestaurantForm = ({ onSave, isLoading, restaurant }: Props) => {
     });
 
     if (formDataJson.imageFile) {
+      console.log(formDataJson.imageFile);
       formData.append(`imageFile`, formDataJson.imageFile);
     }
 
@@ -134,7 +135,7 @@ const ManageRestaurantForm = ({ onSave, isLoading, restaurant }: Props) => {
         <Separator />
         <MenuSection />
         <Separator />
-        <ImageSection />
+        <ImageSection pName="restaurant listing in the search results" ratio={16/9}/>
         {isLoading ? <LoadingButton /> : <Button type="submit">Submit</Button>}
       </form>
     </Form>

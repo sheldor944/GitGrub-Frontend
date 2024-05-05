@@ -15,6 +15,7 @@ import LoadingButton from "@/components/LoadingButton";
 import { Button } from "@/components/ui/button";
 import { User } from "@/types";
 import { useEffect } from "react";
+import ImageSection from "../manage-restaurant-form/ImageSection";
 
 const formSchema = z.object({
   email: z.string().optional(),
@@ -23,13 +24,18 @@ const formSchema = z.object({
   city: z.string().min(1, "City is required"),
   country: z.string().min(1, "Country is required"),
   usertype: z.string(),
+  imageUrl: z.string().optional(),
+  imageFile: z.instanceof(File, { message: "image is required" }).optional(),
+}).refine((data) => data.imageUrl || data.imageFile, {
+  message: "Either image URL or image File must be provided",
+  path: ["imageFile"],
 });
 
 export type UserFormData = z.infer<typeof formSchema>;
 
 type Props = {
   currentUser: User;
-  onSave: (userProfileData: UserFormData) => void;
+  onSave: (userProfileData: FormData) => void;
   isLoading: boolean;
   title?: string;
   buttonText?: string;
@@ -52,13 +58,25 @@ const UserProfileForm = ({
   useEffect(() => {
     form.reset(currentUser);
   }, [currentUser, form]);
+  const onSubmit = (formDataJason: UserFormData) => {
+    const formData = new FormData();
+    Object.entries(formDataJason).forEach(([key, value]) => {
+      formData[key] = String(value)
+    });
+    if(formDataJason.imageFile){
+      formData.append(`imageFile`,formDataJason.imageFile);
+    }
+    onSave(formData)
+    
+  }
 
   return (
     <Form {...form}>
       <form
-        onSubmit={form.handleSubmit(onSave)}
+        onSubmit={form.handleSubmit(onSubmit)}
         className="space-y-4 bg-gray-50 rounded-lg md:p-10"
       >
+        <ImageSection pName="Porfile Picture" ratio={1}/>
         <div>
           <h2 className="text-2xl font-bold">{title}</h2>
           <FormDescription>

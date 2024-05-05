@@ -1,5 +1,7 @@
+import { UserFormData } from "@/forms/user-profile-form/UserProfileForm";
 import { User } from "@/types";
 import { useAuth0 } from "@auth0/auth0-react";
+import { File } from "buffer";
 import { useMutation, useQuery } from "react-query";
 import { toast } from "sonner";
 
@@ -84,21 +86,25 @@ type UpdateMyUserRequest = {
   addressLine1: string;
   city: string;
   country: string;
+  usertype: string;
+  imageFile: File;
 };
 
 export const useUpdateMyUser = () => {
   const { getAccessTokenSilently } = useAuth0();
 
-  const updateMyUserRequest = async (formData: UpdateMyUserRequest) => {
+  const updateMyUserRequest = async (formData: FormData):Promise<User> => {
     const accessToken = await getAccessTokenSilently();
+    console.log(formData);
 
     const response = await fetch(`${API_BASE_URL}/api/my/user`, {
       method: "PUT",
       headers: {
         Authorization: `Bearer ${accessToken}`,
         "Content-Type": "application/json",
+        
       },
-      body: JSON.stringify(formData),
+      body:JSON.stringify(formData),
     });
 
     if (!response.ok) {
