@@ -9,7 +9,9 @@ import { Calendar } from "@/components/ui/calendar";
 
 import React, { useState } from 'react';
 import DateInput from "@/components/DatePicker";
-
+import EmployeeSearchBar from "@/components/EmployeeSearchBar";
+import { SearchForm } from "@/components/EmployeeSearchBar";
+import { Navigate, useNavigate } from "react-router-dom";
 
 const formSchema = z.object({
     email: z.string().optional(),
@@ -39,6 +41,13 @@ interface DateInputProps {
 }
 
 const EmployeeProfileForm = ({ onSave, isLoading }: Props) => {
+    const navigate = useNavigate();
+    const handleSearchSubmit = (SearchFormValues: SearchForm) => {
+        navigate({
+            pathname: `/search/${SearchFormValues.searchQuery}`
+        });
+    };
+
     const form = useForm<EmployeeFormData>({
         resolver: zodResolver(formSchema),
     });
@@ -60,11 +69,12 @@ const EmployeeProfileForm = ({ onSave, isLoading }: Props) => {
         form.reset();
     }
 
-    return (
+    return (        
         <Form {...form}>
+            <EmployeeSearchBar placeHolder="Search by name/ID" onSubmit={handleSearchSubmit} />
             <form onSubmit={form.handleSubmit(onSubmitHaapens)} className="space-y-4 bg-gray-50 rounded-lg md:p-10">
                 <div>
-                    <h2 className="text-2x1 font-bold"> Employee Profile Form </h2>
+                    <h1 className="text-4x1 font-bold"> Employee Profile Form </h1>
                     <FormDescription>
                         Add/Update employee information here
                     </FormDescription>
