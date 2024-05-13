@@ -19,7 +19,7 @@ type Props = {
 const dummy: UserFormData = {
   name: "John Doe",
   addressLine1: "123 Street",
-  city: "City",
+  city: "dineIN",
   usertype : "User",
   country: "Country",
   email: "john@example.com"
@@ -38,8 +38,8 @@ const CheckoutButton = ({ onCheckout, disabled, isLoading }: Props) => {
   const { currentUser, isLoading: isGetUserLoading } = useGetMyUser();
   dummy.name = currentUser?.name || currentUser?.email ||""
   dummy.email = currentUser?.email || ""
-  dummy.addressLine1 = currentUser?.addressLine1 || ""
-  dummy.city = currentUser?.city || ""
+  dummy.addressLine1 =  "Dien-In"
+  dummy.city = "dine-In"
 
 
   // adding dine in option
