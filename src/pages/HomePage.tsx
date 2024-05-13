@@ -3,6 +3,7 @@ import appDownloadImage from "../assets/appDownload.png";
 import SearchBar, { SearchForm } from "@/components/SearchBar";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
+import { useEffect } from "react";
 
 const HomePage = () => {
   const navigate = useNavigate();
@@ -12,6 +13,17 @@ const HomePage = () => {
       pathname: `/search/${searchFormValues.searchQuery}`,
     });
   };
+
+  useEffect(() => {
+    const handlePopState = () => {
+      window.location.reload();
+    };
+    window.addEventListener("popstate", handlePopState);
+
+    return () => {
+      window.removeEventListener("popstate", handlePopState);
+    };
+  }, []);
 
   return (
     <div className="flex flex-col gap-12">

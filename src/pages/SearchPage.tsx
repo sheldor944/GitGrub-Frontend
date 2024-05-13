@@ -26,7 +26,11 @@ const SearchPage = () => {
 
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
 
-  const { results, isLoading } = useSearchRestaurants(searchState, city);
+  let ans = null
+  let { results, isLoading = true } = useSearchRestaurants(searchState, city)
+  ans = results
+
+  console.log(isLoading)
 
   const setSortOption = (sortOption: string) => {
     setSearchState((prevState) => ({
@@ -102,7 +106,7 @@ const SearchPage = () => {
           />
         </div>
 
-        {results.data.map((restaurant) => (
+        {!isLoading && ans && ans.data.map((restaurant) => (
           <SearchResultCard restaurant={restaurant} />
         ))}
         <PaginationSelector
