@@ -101,10 +101,10 @@ export const useUpdateMyUser = () => {
       method: "PUT",
       headers: {
         Authorization: `Bearer ${accessToken}`,
-        "Content-Type": "application/json",
+        
         
       },
-      body:JSON.stringify(formData),
+      body:formData
     });
 
     if (!response.ok) {

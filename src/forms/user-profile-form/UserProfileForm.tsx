@@ -61,7 +61,7 @@ const UserProfileForm = ({
   const onSubmit = (formDataJason: UserFormData) => {
     const formData = new FormData();
     Object.entries(formDataJason).forEach(([key, value]) => {
-      formData[key] = String(value)
+      formData.append(key, String(value));
     });
     if(formDataJason.imageFile){
       formData.append(`imageFile`,formDataJason.imageFile);
