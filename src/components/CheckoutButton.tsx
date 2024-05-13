@@ -36,6 +36,12 @@ const CheckoutButton = ({ onCheckout, disabled, isLoading }: Props) => {
   const { pathname } = useLocation();
 
   const { currentUser, isLoading: isGetUserLoading } = useGetMyUser();
+  dummy.name = currentUser?.name || currentUser?.email ||""
+  dummy.email = currentUser?.email || ""
+  dummy.addressLine1 = currentUser?.addressLine1 || ""
+  dummy.city = currentUser?.city || ""
+
+
   // adding dine in option
   const [deliveryOption, setDeliveryOption] = useState("Dine-In");
 

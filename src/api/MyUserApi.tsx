@@ -12,6 +12,7 @@ export const useGetMyUser = () => {
 
   const getMyUserRequest = async (): Promise<User> => {
     const accessToken = await getAccessTokenSilently();
+    console.log(accessToken);
 
     const response = await fetch(`${API_BASE_URL}/api/my/user`, {
       method: "GET",
