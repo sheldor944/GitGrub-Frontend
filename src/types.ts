@@ -21,6 +21,7 @@ export type Restaurant = {
   restaurantName: string;
   city: string;
   country: string;
+  searchingKeyWord:string;
   deliveryPrice: number;
   estimatedDeliveryTime: number;
   cuisines: string[];

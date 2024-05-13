@@ -59,6 +59,19 @@ const DetailsSection = () => {
             </FormItem>
           )}
         />
+        <FormField
+          control={control}
+          name="searchingKeyWord"
+          render={({ field }) => (
+            <FormItem className="flex-1">
+              <FormLabel>Searching Keyword</FormLabel>
+              <FormControl>
+                <Input {...field} className="bg-white" />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
       </div>
 
       <FormField
