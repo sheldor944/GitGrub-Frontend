@@ -70,6 +70,7 @@ const ManageRestaurantPage = () => {
       <TabsContent value="employee-profile" className="space-y-5 bg-gray-50 p-10 rounded-lg" >
         
         <EmployeeProfileForm 
+        
           onSave={addEmployee}
           isLoading={isEmployeeLoading}
         />

@@ -356,13 +356,14 @@ export const useAddEmployee = () => {
       method: "POST",
       headers: {
         Authorization: `Bearer ${accessToken}`,
-        // "Content-Type": "application/json",
+        "Content-Type": "application/json",
       },
-      body: employeeFormData
+      body: JSON.stringify(employeeFormData)
     });
     // console.log("this is the response from useCreateReview ");
     // console.log(response);
     // console.log(response.body);
+    console.log(JSON.stringify(employeeFormData))
 
     if (!response.ok) {
       throw new Error("Failed to create employee");
@@ -380,7 +381,7 @@ export const useAddEmployee = () => {
   } = useMutation(addEmployeeRequest);
   if(isSuccess){
     toast.success("Employee Aded sucessfully"); 
-    window.location.reload();
+    // window.location.reload();
   }
   if(isError){
     toast.error("Failed to add Employee");
