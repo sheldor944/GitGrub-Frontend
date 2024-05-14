@@ -1,8 +1,9 @@
-import { Order, Restaurant } from "@/types";
+import { Employee, EmployeeSearchResponse, Order, Restaurant, RestaurantSearchResponse } from "@/types";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useMutation, useQuery } from "react-query";
 import { toast } from "sonner";
 import { Items } from '@/types';
+import { EmployeeSearchState } from "@/forms/employee-profile-form/EmployeeProfileForm";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -348,16 +349,16 @@ export const useAddEmployee = () => {
 
   const addEmployeeRequest = async (
     employeeFormData : FormData
-  ): Promise<Items> => {
+  ): Promise<Employee> => {
     const accessToken = await getAccessTokenSilently();
      console.log(employeeFormData)
     const response = await fetch(`${API_BASE_URL}/api/my/restaurant/addEmployee`, {
       method: "POST",
       headers: {
         Authorization: `Bearer ${accessToken}`,
-        "Content-Type": "application/json",
+        // "Content-Type": "application/json",
       },
-      body: JSON.stringify(employeeFormData),
+      body: employeeFormData
     });
     // console.log("this is the response from useCreateReview ");
     // console.log(response);
@@ -392,4 +393,44 @@ export const useAddEmployee = () => {
     isSuccess,
   };
 
+};
+export const useSearchEmployee = (
+  searchState: EmployeeSearchState,
+  name?: string
+) => {
+  console.log(name)
+  const { getAccessTokenSilently } = useAuth0();
+  const createSearchRequest = async (): Promise<EmployeeSearchResponse> => {
+    const accessToken = await getAccessTokenSilently();
+    const params = new URLSearchParams();
+    params.set("searchQuery", searchState.searchQuery);
+    const response = await fetch(
+      `${API_BASE_URL}/api/my/restaurant/searchEmployee/${name}?${params.toString()}`,{
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        // "Content-Type": "application/json",
+      },
+    }
+    );
+    
+
+    
+    if (!response.ok) {
+      throw new Error("Failed to get Employee");
+    }
+
+    const answer = response.json();
+    return answer
+  };
+
+  const { data: result, isLoading } = useQuery(
+    ["searchEmployee", searchState],
+    createSearchRequest,
+    { enabled: !!name }
+  );
+
+  return {
+    result,
+    isLoading,
+  };
 };

@@ -6,12 +6,12 @@ import { Input } from "@/components/ui/input";
 import LoadingButton from "@/components/LoadingButton";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
-
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import DateInput from "@/components/DatePicker";
 import EmployeeSearchBar from "@/components/EmployeeSearchBar";
 import { SearchForm } from "@/components/EmployeeSearchBar";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
+import { useSearchEmployee } from "@/api/MyRestaurantApi";
 
 const formSchema = z.object({
     email: z.string().optional(),
@@ -22,9 +22,6 @@ const formSchema = z.object({
     joiningDate: z.date(),
     resigningDate: z.date(),
     shiftDuration: z.string().min(1, "Shift is required"),
-    // addressLine1: z.string().min(1, "Address Line 1 is required"),
-    // city: z.string().min(1, "City is required"),
-    // country: z.string().min(1, "Country is required"),
 });
 
 type EmployeeFormData = z.infer<typeof formSchema>;
@@ -40,39 +37,51 @@ interface DateInputProps {
     onDateChange: (date: Date | null) => void;
 }
 
+export type EmployeeSearchState = {
+    searchQuery: string;
+};
+
 const EmployeeProfileForm = ({ onSave, isLoading }: Props) => {
-    const navigate = useNavigate();
-    const handleSearchSubmit = (SearchFormValues: SearchForm) => {
-        navigate({
-            pathname: `/search/${SearchFormValues.searchQuery}`
-        });
-    };
+    const [searchState, setSearchState] = useState<EmployeeSearchState>({ searchQuery: "" });
+    const { result, isLoading: searchLoading } = useSearchEmployee(searchState, searchState.searchQuery);
 
     const form = useForm<EmployeeFormData>({
         resolver: zodResolver(formSchema),
+        defaultValues: {
+            email: "",
+            name: "",
+            gender: "",
+            role: "",
+            phone: "",
+            joiningDate: undefined,
+            resigningDate: undefined,
+            shiftDuration: ""
+        },
     });
 
-    const onSubmitHaapens = (formDataJson: EmployeeFormData) => {
-        const formData = new FormData();
-        console.log(formDataJson)
-        Object.entries(formDataJson).forEach(([key, value]) => {
-            formData[key] = String(value)
-        });
-        // formData.ratingTime = time.now();
-        console.log(" submit button is clicked ");
-        for (let pair of formData.entries()) {
-            console.log(pair[0], pair[1]);
+    useEffect(() => {
+        if (!searchLoading && result) {
+            form.reset(result);
         }
+    }, [searchLoading, result, form]);
+
+    const handleSearchSubmit = (SearchFormValues: SearchForm) => {
+        setSearchState({ searchQuery: SearchFormValues.searchQuery });
+    };
+
+    const onSubmit = (formDataJson: EmployeeFormData) => {
+        const formData = new FormData();
+        Object.entries(formDataJson).forEach(([key, value]) => {
+            formData.append(key, String(value));
+        });
         onSave(formData);
-        console.log("eikhane ")
-        console.log(formData);
         form.reset();
     }
 
-    return (        
+    return (
         <Form {...form}>
             <EmployeeSearchBar placeHolder="Search by name/ID" onSubmit={handleSearchSubmit} />
-            <form onSubmit={form.handleSubmit(onSubmitHaapens)} className="space-y-4 bg-gray-50 rounded-lg md:p-10">
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 bg-gray-50 rounded-lg md:p-10">
                 <div>
                     <h1 className="text-4x1 font-bold"> Employee Profile Form </h1>
                     <FormDescription>
@@ -98,8 +107,8 @@ const EmployeeProfileForm = ({ onSave, isLoading }: Props) => {
                             <FormMessage />
                         </FormItem>
                     )} />
-
                 </div>
+                
                 <div className="flex flex-col md:flex-row gap-4">
                     <FormField
                         control={form.control}
@@ -124,7 +133,6 @@ const EmployeeProfileForm = ({ onSave, isLoading }: Props) => {
                             </FormItem>
                         )}
                     />
-
                     <FormField control={form.control} name="role" render={({ field }) => (
                         <FormItem className="flex-1">
                             <FormLabel className="p-2">Role</FormLabel>
@@ -134,7 +142,6 @@ const EmployeeProfileForm = ({ onSave, isLoading }: Props) => {
                             <FormMessage />
                         </FormItem>
                     )} />
-
                     <FormField control={form.control} name="phone" render={({ field }) => (
                         <FormItem className="flex-1">
                             <FormLabel className="p-2">Phone Number</FormLabel>
@@ -144,10 +151,9 @@ const EmployeeProfileForm = ({ onSave, isLoading }: Props) => {
                             <FormMessage />
                         </FormItem>
                     )} />
-
                 </div>
+                
                 <div className="flex flex-col md:flex-row gap-4">
-
                     <FormField
                         control={form.control}
                         name="joiningDate"
@@ -155,7 +161,6 @@ const EmployeeProfileForm = ({ onSave, isLoading }: Props) => {
                             <FormItem className="flex-1">
                                 <FormLabel className="p-2">Joining Date</FormLabel>
                                 <FormControl>
-                                    {/* Replace FormControl with DateInput */}
                                     <DateInput
                                         label=""
                                         selectedDate={field.value ? new Date(field.value) : null}
@@ -166,7 +171,6 @@ const EmployeeProfileForm = ({ onSave, isLoading }: Props) => {
                             </FormItem>
                         )}
                     />
-
                     <FormField
                         control={form.control}
                         name="resigningDate"
@@ -174,7 +178,6 @@ const EmployeeProfileForm = ({ onSave, isLoading }: Props) => {
                             <FormItem className="flex-1">
                                 <FormLabel className="p-2">Resigning Date</FormLabel>
                                 <FormControl>
-                                    {/* Replace FormControl with DateInput */}
                                     <DateInput
                                         label=""
                                         selectedDate={field.value ? new Date(field.value) : null}
@@ -185,7 +188,6 @@ const EmployeeProfileForm = ({ onSave, isLoading }: Props) => {
                             </FormItem>
                         )}
                     />
-
                     <FormField control={form.control} name="shiftDuration" render={({ field }) => (
                         <FormItem className="flex-1">
                             <FormLabel className="p-2">Shift</FormLabel>
@@ -195,42 +197,8 @@ const EmployeeProfileForm = ({ onSave, isLoading }: Props) => {
                             <FormMessage />
                         </FormItem>
                     )} />
-
                 </div>
-                {/* <div className="flex flex-col md:flex-row gap-4">
-
-                    <FormField control={form.control} name="addressLine1" render={({ field }) => (
-                        <FormItem className="flex-1">
-                            <FormLabel className="p-2">Address Line 1</FormLabel>
-                            <FormControl>
-                                <Input {...field} className="bg-white" />
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )} />
-
-                    <FormField control={form.control} name="city" render={({ field }) => (
-                        <FormItem className="flex-1">
-                            <FormLabel className="p-2">City</FormLabel>
-                            <FormControl>
-                                <Input {...field} className="bg-white" />
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )} />
-
-                    <FormField control={form.control} name="country" render={({ field }) => (
-                        <FormItem className="flex-1">
-                            <FormLabel className="p-2">Country</FormLabel>
-                            <FormControl>
-                                <Input {...field} className="bg-white" />
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )} />
-
-                </div> */}
-
+                
                 {isLoading ? <LoadingButton /> : <Button type="submit" className="bg-dark_color">
                     Submit Employee Info
                 </Button>}

@@ -67,6 +67,9 @@ export type RestaurantSearchResponse = {
     pages: number;
   };
 };
+export type EmployeeSearchResponse = {
+  data: Employee;
+};
 export type Review = {
   user: string;
   restaurant: string;
@@ -80,3 +83,14 @@ export type Items = {
   itemName: string;
   availabeQuantity: number;
 };
+export type Employee={
+  restaurant: string;
+  name:string;
+  gender: string;
+  role: string;
+  email: string;
+  phone: string;
+  joiningDate : Date;
+  shiftDuration : string
+  resigningDate : Date;
+}
