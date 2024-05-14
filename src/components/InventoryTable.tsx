@@ -3,6 +3,7 @@ import { Items } from '@/types';
 import { useGetInventory, useUpdateInventoryItem } from '@/api/MyRestaurantApi';
 import { Button } from './ui/button';
 import { toast } from 'sonner';
+import InventorySearchBar, { SearchForm } from './InventorySearchBar';
 
 const InventoryTable = () => {
   const [items, setItems] = useState<Items[]>([]);
@@ -22,6 +23,16 @@ const InventoryTable = () => {
   const handleAdd = (index: number) => {
     setSelectedIndex(index);
     setPopupVisible(true);
+  };
+
+  const handleSearchSubmit = (SearchFormValues: SearchForm) => {
+    const foundIndex = items.findIndex(item => item.itemName.toLowerCase() === SearchFormValues.searchQuery.toLowerCase());
+    if (foundIndex !== -1) {
+      setSelectedIndex(foundIndex);
+      setPopupVisible(true);
+    } else {
+      toast.error('Item not found');
+    }
   };
 
   const handleConfirm = async (isAdd: boolean) => {
@@ -58,6 +69,7 @@ const InventoryTable = () => {
 
   return (
     <div className="overflow-x-auto">
+      <InventorySearchBar placeHolder="Search by name/ID" onSubmit={handleSearchSubmit} />
       <table className="min-w-full divide-y divide-gray-200">
         <thead className="bg-gray-50">
           <tr>
@@ -78,9 +90,10 @@ const InventoryTable = () => {
           ))}
         </tbody>
       </table>
-      {popupVisible && (
+      {popupVisible && selectedIndex !== null && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
           <div ref={popupRef} className="bg-white p-4 rounded-lg">
+            <h2 className="text-lg font-medium mb-4">Update {items[selectedIndex].itemName}</h2>
             <input
               type="number"
               value={amountToAdd}

@@ -20,12 +20,12 @@ export type InventoryFormData = z.infer<typeof formSchema>;
 const ManageInventoryForm = ({ onAdd, isLoading, buttonText = 'Add Item' }: { onAdd: (formData: FormData) => void, isLoading: boolean, buttonText?: string }) => {
   // Form hook
 
-  const navigate = useNavigate();
-  const handleSearchSubmit = (SearchFormValues: SearchForm) => {
-    navigate({
-      pathname: `/search/${SearchFormValues.searchQuery}`
-    });
-  };
+  //const navigate = useNavigate();
+  // const handleSearchSubmit = (SearchFormValues: SearchForm) => {
+  //   navigate({
+  //     pathname: `/search/${SearchFormValues.searchQuery}`
+  //   });
+  // };
 
   const form = useForm<InventoryFormData>({
     resolver: zodResolver(formSchema),
@@ -54,7 +54,7 @@ const ManageInventoryForm = ({ onAdd, isLoading, buttonText = 'Add Item' }: { on
 
   return (
     <Form {...form}>
-      <InventorySearchBar placeHolder="Search by name/ID" onSubmit={handleSearchSubmit} />
+      
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 bg-gray-50 rounded-lg md:p-3">
         <div className='grid grid-cols-2 gap-3 min-w-20' style={{ minWidth: '200px' }}>
           <div className="flex flex-col">
