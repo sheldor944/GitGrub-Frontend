@@ -356,8 +356,9 @@ export const useAddEmployee = () => {
       method: "POST",
       headers: {
         Authorization: `Bearer ${accessToken}`,
+        "Content-Type": "application/json",
       },
-      body: employeeFormData
+      body: JSON.stringify(employeeFormData)
     });
     // console.log("this is the response from useCreateReview ");
     // console.log(response);

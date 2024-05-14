@@ -71,10 +71,16 @@ const EmployeeProfileForm = ({ onSave, isLoading }: Props) => {
 
     const onSubmit = (formDataJson: EmployeeFormData) => {
         const formData = new FormData();
-        Object.entries(formDataJson).forEach(([key, value]) => {
-            formData.append(key, String(value));
-        });
-        onSave(formData);
+    console.log(formDataJson)
+    Object.entries(formDataJson).forEach(([key, value]) => {
+      formData[key] = String(value)
+    });
+    // formData.ratingTime = time.now();
+    console.log(" submit button is clicked ");
+    for (let pair of formData.entries()) {
+      console.log(pair[0], pair[1]);
+    }
+    onSave(formData);
         form.reset();
     }
 
