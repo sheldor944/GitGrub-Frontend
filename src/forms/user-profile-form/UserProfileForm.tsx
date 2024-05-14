@@ -76,7 +76,7 @@ const UserProfileForm = ({
         onSubmit={form.handleSubmit(onSubmit)}
         className="space-y-4 bg-gray-50 rounded-lg md:p-10"
       >
-        <ImageSection pName="Porfile Picture" ratio={1}/>
+        {!isDelivery && <ImageSection pName="Porfile Picture" ratio={1}/>}
         <div>
           <h2 className="text-2xl font-bold">{title}</h2>
           <FormDescription>
