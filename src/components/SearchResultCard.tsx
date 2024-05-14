@@ -2,16 +2,23 @@ import { Restaurant } from "@/types";
 import { Link } from "react-router-dom";
 import { AspectRatio } from "./ui/aspect-ratio";
 import { Banknote, Clock, Dot } from "lucide-react";
-
+import useIntersectionObserver from "@/useIntersectionObserver";
 type Props = {
   restaurant: Restaurant;
 };
 
 const SearchResultCard = ({ restaurant }: Props) => {
+  const [ref, isIntersecting] = useIntersectionObserver({
+    threshold: 0.1,
+  });
+
   return (
     <Link
       to={`/detail/${restaurant._id}`}
-      className="grid lg:grid-cols-[2fr_3fr] gap-5 group"
+      className={`grid lg:grid-cols-[2fr_3fr] gap-5 group transition-transform duration-1000 ${
+        isIntersecting ? "transform translate-x-0 opacity-100" : "transform -translate-x-60 opacity-0"
+      }`}
+      ref={ref}
     >
       <AspectRatio ratio={16 / 6}>
         <img
@@ -26,7 +33,7 @@ const SearchResultCard = ({ restaurant }: Props) => {
         <div id="card-content" className="grid md:grid-cols-2 gap-2">
           <div className="flex flex-row flex-wrap">
             {restaurant.cuisines.map((item, index) => (
-              <span className="flex">
+              <span className="flex" key={index}>
                 <span>{item}</span>
                 {index < restaurant.cuisines.length - 1 && <Dot />}
               </span>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Items } from '@/types';
 import { useGetInventory, useUpdateInventoryItem } from '@/api/MyRestaurantApi';
 import { Button } from './ui/button';
@@ -11,6 +11,7 @@ const InventoryTable = () => {
   const [popupVisible, setPopupVisible] = useState(false);
   const [amountToAdd, setAmountToAdd] = useState(0);
   const { updateInventoryRequest } = useUpdateInventoryItem();
+  const popupRef = useRef(null);
 
   useEffect(() => {
     if (!isLoading && fetchedItems) {
@@ -22,7 +23,6 @@ const InventoryTable = () => {
     setSelectedIndex(index);
     setPopupVisible(true);
   };
-
 
   const handleConfirm = async (isAdd: boolean) => {
     if (selectedIndex !== null && items[selectedIndex]) {
@@ -42,6 +42,19 @@ const InventoryTable = () => {
     setAmountToAdd(0);
     setSelectedIndex(null);
   };
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (popupRef.current && !popupRef.current.contains(event.target)) {
+        setPopupVisible(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   return (
     <div className="overflow-x-auto">
@@ -67,15 +80,15 @@ const InventoryTable = () => {
       </table>
       {popupVisible && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-          <div className="bg-white p-4 rounded-lg">
+          <div ref={popupRef} className="bg-white p-4 rounded-lg">
             <input
               type="number"
               value={amountToAdd}
               onChange={(e) => setAmountToAdd(parseFloat(e.target.value))}
               className="border border-gray-300 p-2 rounded-md mr-2"
             />
-            <Button onClick={() => handleConfirm(true)} className="mr-2 bg-green-500 text-white px-2 rounded-md">Add</Button>
-            <Button onClick={() => handleConfirm(false)} className="bg-red-500 text-white px-1  rounded-md">Remove</Button>
+            <Button onClick={() => handleConfirm(true)} className="mr-2 bg-customgreen text-white px-2 rounded-md">Add</Button>
+            <Button onClick={() => handleConfirm(false)} className="bg-customred text-white px-1 rounded-md">Remove</Button>
           </div>
         </div>
       )}

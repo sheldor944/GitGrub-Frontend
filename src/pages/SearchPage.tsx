@@ -5,7 +5,7 @@ import SearchBar, { SearchForm } from "@/components/SearchBar";
 import SearchResultCard from "@/components/SearchResultCard";
 import SearchResultInfo from "@/components/SearchResultInfo";
 import SortOptionDropdown from "@/components/SortOptionDropdown";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 
 export type SearchState = {
@@ -16,7 +16,7 @@ export type SearchState = {
 };
 
 const SearchPage = () => {
-  const { city } = useParams();
+  const { city } = useParams<{ city: string }>();
   const [searchState, setSearchState] = useState<SearchState>({
     searchQuery: "",
     page: 1,
@@ -25,12 +25,26 @@ const SearchPage = () => {
   });
 
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
+  const { results, isLoading } = useSearchRestaurants(searchState, city);
 
-  let ans = null
-  let { results, isLoading = true } = useSearchRestaurants(searchState, city)
-  ans = results
+  const handleScroll = () => {
+    if (
+      window.innerHeight + document.documentElement.scrollTop !==
+      document.documentElement.offsetHeight
+    )
+      return;
+    setSearchState((prevState) => ({
+      ...prevState,
+      page: prevState.page + 1,
+    }));
+  };
 
-  console.log(isLoading)
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
 
   const setSortOption = (sortOption: string) => {
     setSearchState((prevState) => ({
@@ -71,8 +85,8 @@ const SearchPage = () => {
     }));
   };
 
-  if (isLoading) {
-    <span>Loading ...</span>;
+  if (isLoading && searchState.page === 1) {
+    return <span>Loading ...</span>;
   }
 
   if (!results?.data || !city) {
@@ -81,7 +95,7 @@ const SearchPage = () => {
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-[250px_1fr] gap-5">
-      <div id="cuisines-list">
+      <div id="cuisines-list" className="z-20 bg-white">
         <CuisineFilter
           selectedCuisines={searchState.selectedCuisines}
           onChange={setSelectedCuisines}
@@ -106,14 +120,10 @@ const SearchPage = () => {
           />
         </div>
 
-        {!isLoading && ans && ans.data.map((restaurant) => (
-          <SearchResultCard restaurant={restaurant} />
+        {results.data.map((restaurant, index) => (
+          <SearchResultCard key={index} restaurant={restaurant} />
         ))}
-        <PaginationSelector
-          page={results.pagination.page}
-          pages={results.pagination.pages}
-          onPageChange={setPage}
-        />
+        {isLoading && <span>Loading more...</span>}
       </div>
     </div>
   );
