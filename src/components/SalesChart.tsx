@@ -74,7 +74,11 @@ const SalesChart: React.FC<{ orders: Order[] | undefined }> = ({ orders }) => {
     const totalOrders = orders.length;
 
     // Calculate average order value
-    const totalOrderValues = orders.reduce((acc, curr) => acc + curr.totalPrice, 0);
+    const totalOrderValues = orders.reduce((acc, curr) => {
+      const totalPrice = isNaN(curr.totalAmount) ? 0 : curr.totalAmount/10000;
+      return acc + totalPrice;
+    }, 0);
+    console.log(totalOrderValues);
     const averageOrderValue = totalOrderValues / totalOrders;
 
     // Calculate total order value
@@ -171,7 +175,7 @@ const SalesChart: React.FC<{ orders: Order[] | undefined }> = ({ orders }) => {
     const newAdditionalChartInstance = new Chart(additionalCtx, {
       type: 'bar',
       data: {
-        labels: ['Most Ordered Item', 'Total Orders', 'Average Order Value', 'Total Order Value'],
+        labels: ['Most Ordered Item', 'Total Orders', 'Average Order Value(/100)', 'Total Order Value(/100)'],
         datasets: [
           {
             label: 'Statistics',
