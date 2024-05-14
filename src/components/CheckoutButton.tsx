@@ -7,7 +7,7 @@ import UserProfileForm, {
   UserFormData,
 } from "@/forms/user-profile-form/UserProfileForm";
 import { useGetMyUser } from "@/api/MyUserApi";
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import React from "react";
 
 type Props = {
@@ -18,13 +18,12 @@ type Props = {
 
 const dummy: UserFormData = {
   name: "John Doe",
-  addressLine1: "123 Street",
-  city: "dineIN",
+  addressLine1: "Dine-In",
+  city: "dine-In",
   usertype : "User",
   country: "Country",
   email: "john@example.com"
 };
-
 
 const CheckoutButton = ({ onCheckout, disabled, isLoading }: Props) => {
   const {
@@ -36,16 +35,18 @@ const CheckoutButton = ({ onCheckout, disabled, isLoading }: Props) => {
   const { pathname } = useLocation();
 
   const { currentUser, isLoading: isGetUserLoading } = useGetMyUser();
-  dummy.name = currentUser?.name || currentUser?.email ||""
-  dummy.email = currentUser?.email || ""
-  dummy.addressLine1 =  "Dien-In"
-  dummy.city = "dine-In"
 
+  // Ensure dummy data is set when currentUser is loaded
+  useEffect(() => {
+    if (currentUser) {
+      dummy.name = currentUser.name || currentUser.email || "John Doe";
+      dummy.email = currentUser.email || "john@example.com";
+    }
+  }, [currentUser]);
 
-  // adding dine in option
-  const [deliveryOption, setDeliveryOption] = useState("Dine-In");
+  const [deliveryOption, setDeliveryOption] = useState("dineIn");
 
-  const handleDeliveryOptionChange = (event : any ) => {
+  const handleDeliveryOptionChange = (event) => {
     setDeliveryOption(event.target.value);
   };
 
@@ -59,69 +60,65 @@ const CheckoutButton = ({ onCheckout, disabled, isLoading }: Props) => {
 
   if (!isAuthenticated) {
     return (
-      <Button onClick={onLogin} className="bg-orange-500 flex-1">
+      <Button onClick={onLogin} className="bg-dark_color flex-1">
         Log in to check out
       </Button>
     );
   }
 
-  if (isAuthLoading || !currentUser || isLoading) {
+  if (isAuthLoading || isGetUserLoading || isLoading) {
     return <LoadingButton />;
   }
-
-
-
 
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button disabled={disabled} className="bg-orange-500 flex-1">
+        <Button disabled={disabled} className="bg-dark_color flex-1">
           Go to checkout
         </Button>
       </DialogTrigger>
       <DialogContent className="max-w-[425px] md:min-w-[700px] bg-gray-50">
-      <div>
-        <p className="mb-4">Select an option:</p>
-        <div className="flex mb-4">
-          <input
-            type="radio"
-            id="dineIn"
-            name="deliveryOption"
-            value="dineIn"
-            checked={deliveryOption === "dineIn"}
-            onChange={handleDeliveryOptionChange}
-          />
-          <label htmlFor="dineIn" className="ml-2 mr-4">
-            Dine-In
-          </label>
-          <input
-            type="radio"
-            id="delivery"
-            name="deliveryOption"
-            value="delivery"
-            checked={deliveryOption === "delivery"}
-            onChange={handleDeliveryOptionChange}
-          />
-          <label htmlFor="delivery" className="ml-2">
-            Delivery
-          </label>
+        <div>
+          <p className="mb-4">Select an option:</p>
+          <div className="flex mb-4">
+            <input
+              type="radio"
+              id="dineIn"
+              name="deliveryOption"
+              value="dineIn"
+              checked={deliveryOption === "dineIn"}
+              onChange={handleDeliveryOptionChange}
+            />
+            <label htmlFor="dineIn" className="ml-2 mr-4">
+              Dine-In
+            </label>
+            <input
+              type="radio"
+              id="delivery"
+              name="deliveryOption"
+              value="delivery"
+              checked={deliveryOption === "delivery"}
+              onChange={handleDeliveryOptionChange}
+            />
+            <label htmlFor="delivery" className="ml-2">
+              Delivery
+            </label>
+          </div>
         </div>
-      </div>
-      {deliveryOption === "delivery" && (
-        <UserProfileForm
-          isDelivery = {true} 
-          currentUser={currentUser}
-          onSave={onCheckout}
-          isLoading={isGetUserLoading}
-          title="Confirm Delivery Details"
-          buttonText="Continue to payment"
-        />
-      )}
-      {deliveryOption !== "delivery" && (
-          <Button type="submit" className="bg-orange-500" onClick={(event) => onCheckout(dummy)} >
-          { "Continue to Payment" }
-        </Button>
-      )}
+        {deliveryOption === "delivery" ? (
+          <UserProfileForm
+            isDelivery={true}
+            currentUser={currentUser}
+            onSave={onCheckout}
+            isLoading={isGetUserLoading}
+            title="Confirm Delivery Details"
+            buttonText="Continue to payment"
+          />
+        ) : (
+          <Button type="submit" className="bg-dark_color" onClick={() => onCheckout(dummy)}>
+            Continue to Payment
+          </Button>
+        )}
       </DialogContent>
     </Dialog>
   );
