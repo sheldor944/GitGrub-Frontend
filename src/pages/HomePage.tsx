@@ -82,7 +82,8 @@ const HomePage = () => {
         variants={searchBarVariants}
       >
         <h1 className="text-5xl font-bold tracking-tight text-dark_color">
-          খিদা লাগসে ঢাবিয়ান্স!?
+          {/* খিদা লাগসে ঢাবিয়ান্স!? */}
+          Hungry? No Sweat: GitGrub, Your Culinary Companion!
         </h1>
         <span className="text-xl">Git a Grub by just a click!</span>
         <SearchBar
