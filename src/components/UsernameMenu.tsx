@@ -22,17 +22,20 @@ const UsernameMenu = () => {
         <CircleUserRound className="text-dark_color" />
         {user?.name}
       </DropdownMenuTrigger>
+      
       <DropdownMenuContent>
-        <DropdownMenuItem>
         {currentUser?.usertype === "entrepreneur" && (
+        
+        <DropdownMenuItem>
+        
         <Link
           to="/manage-restaurant"
           className="flex bg-white items-center font-bold hover:text-dark_color"
         >
           My Restaurant
         </Link>
-      )}
         </DropdownMenuItem>
+        )}
         <DropdownMenuItem>
           <Link to="/user-profile" className="font-bold hover:text-dark_color">
             User Profile

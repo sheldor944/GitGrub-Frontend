@@ -53,7 +53,7 @@ const EmployeeSearchBar = ({ onSubmit, onReset, placeHolder, searchQuery }: Prop
       >
         <Search
           strokeWidth={2.5}
-          size={30}
+          size={20}
           className="ml-1 text-dark_color hidden md:block"
         />
         <FormField
@@ -64,7 +64,7 @@ const EmployeeSearchBar = ({ onSubmit, onReset, placeHolder, searchQuery }: Prop
               <FormControl>
                 <Input
                   {...field}
-                  className="border-none shadow-none text-xl focus-visible:ring-0 w-48"
+                  className="border-none shadow-none text-xl focus-visible:ring-0"
                   placeholder={placeHolder}
                 />
               </FormControl>
