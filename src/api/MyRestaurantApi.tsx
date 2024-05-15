@@ -278,7 +278,7 @@ export const useAddInventory = () => {
   } = useMutation(addInventoryRequest);
   if(isSuccess){
     toast.success("item Aded sucessfully"); 
-    window.location.reload();
+    //window.location.reload();
   }
   if(isError){
     toast.error("Failed to add Item");
@@ -434,4 +434,90 @@ export const useSearchEmployee = (
     result,
     isLoading,
   };
+};
+export const useGetEmployee = () => {
+  const { getAccessTokenSilently } = useAuth0();
+
+  const useGetEmployee = async (): Promise<Employee[]> => {
+    console.log("in the getEmployee ");
+    const accessToken = await getAccessTokenSilently();
+    try {
+      const response = await fetch(
+        `${API_BASE_URL}/api/my/restaurant/getEmployee`,{
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+            "Content-Type": "application/json",
+          },
+        });
+
+
+      if (!response.ok) {
+        console.log(error);
+        throw new Error('Failed to fetch Employee');
+      }
+      return response.json();
+    } 
+    catch (error) {
+      throw new Error('Failed to fetch Employee');
+    }
+  };
+
+  const {
+    data: employees,
+    isLoading,
+    error,
+  } = useQuery(['fetchEmployee'], () => useGetEmployee());
+
+  if (error) {
+    toast.error(error.toString());
+  }
+
+  return { employees, isLoading };
+};
+
+export const useUpdateEmployee = () => {
+  const { getAccessTokenSilently } = useAuth0();
+
+  const updateEmployee = async (
+    employeeRequest:FormData
+  ) => {
+    const accessToken = await getAccessTokenSilently();
+
+    const response = await fetch(
+      `${API_BASE_URL}/api/my/restaurant/updateEmployee`,
+      {
+        method: "PUT",
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(employeeRequest),
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to update status");
+    }
+
+    return response.json();
+  };
+
+  const {
+    mutateAsync: updateEmployeeRequest,
+    isLoading,
+    isError,
+    isSuccess,
+    reset,
+  } = useMutation(updateEmployee);
+
+  if (isSuccess) {
+    toast.success("Employee updated");
+  }
+
+  if (isError) {
+    toast.error("Unable to update Employee");
+    reset();
+  }
+
+  return { updateEmployeeRequest, isLoading };
 };

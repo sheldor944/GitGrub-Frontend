@@ -84,6 +84,7 @@ export type Items = {
   availabeQuantity: number;
 };
 export type Employee={
+  _id: string;
   restaurant: string;
   name:string;
   gender: string;
@@ -91,6 +92,6 @@ export type Employee={
   email: string;
   phone: string;
   joiningDate : Date;
-  shiftDuration : string
-  resigningDate : Date;
+  shiftDuration : string;
+  resigningDate : Date|undefined;
 }

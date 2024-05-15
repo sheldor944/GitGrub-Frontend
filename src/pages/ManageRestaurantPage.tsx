@@ -1,4 +1,3 @@
-import { useGetInventory } from "@/api/InventoryApi";
 import {
   useAddEmployee,
   useAddInventory,
@@ -7,6 +6,7 @@ import {
   useGetMyRestaurantOrders,
   useUpdateMyRestaurant,
 } from "@/api/MyRestaurantApi";
+import EmployeeTable from "@/components/EmployeeTable";
 import InventoryTable from "@/components/InventoryTable";
 import OrderItemCard from "@/components/OrderItemCard";
 import SalesChart from "@/components/SalesChart";
@@ -73,7 +73,12 @@ const ManageRestaurantPage = () => {
         
           onSave={addEmployee}
           isLoading={isEmployeeLoading}
+          employee={undefined}
+          addedText="Submit Employee Info"
         />
+        <EmployeeTable>
+          
+        </EmployeeTable>
       </TabsContent>
       <TabsContent value="reports" className="space-y-5 bg-gray-50 p-10 rounded-lg">
         <SalesChart
