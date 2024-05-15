@@ -11,7 +11,7 @@ import { useState, useEffect } from 'react';
 import React from "react";
 
 type Props = {
-  onCheckout: (userFormData: UserFormData) => void;
+  onCheckout: (userFormData: FormData) => void;
   disabled: boolean;
   isLoading: boolean;
 };
@@ -49,7 +49,16 @@ const CheckoutButton = ({ onCheckout, disabled, isLoading }: Props) => {
   const handleDeliveryOptionChange = (event) => {
     setDeliveryOption(event.target.value);
   };
+  const convertToFormData = (data: UserFormData): FormData => {
+    const formData = new FormData();
+    for (const key in data) {
+        formData.append(key, data[key].toString());
+    }
+    return formData;
+};
 
+// Use the convertToFormData function to convert dummy to FormData
+const dummyFormData = convertToFormData(dummy);
   const onLogin = async () => {
     await loginWithRedirect({
       appState: {
@@ -115,7 +124,7 @@ const CheckoutButton = ({ onCheckout, disabled, isLoading }: Props) => {
             buttonText="Continue to payment"
           />
         ) : (
-          <Button type="submit" className="bg-dark_color" onClick={() => onCheckout(dummy)}>
+          <Button type="submit" className="bg-dark_color" onClick={() => onCheckout(dummyFormData)}>
             Continue to Payment
           </Button>
         )}

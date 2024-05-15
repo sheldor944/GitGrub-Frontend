@@ -115,7 +115,7 @@ const DetailPage = () => {
     });
   };
 
-  const onCheckout = async (userFormData: UserFormData) => {
+  const onCheckout = async (userFormData: FormData) => {
     if (!restaurant) {
       return;
     }
@@ -129,11 +129,11 @@ const DetailPage = () => {
       })),
       restaurantId: restaurant._id,
       deliveryDetails: {
-        name: userFormData.name,
-        addressLine1: userFormData.addressLine1,
-        city: userFormData.city,
-        country: userFormData.country,
-        email: userFormData.email as string,
+        name: userFormData.get('name') as string,
+        addressLine1: userFormData.get('addressLine1') as string,
+        city: userFormData.get('city') as string,
+        country: userFormData.get('country') as string,
+        email: userFormData.get('email') as string,
       },
     };
     console.log(cartItems);
